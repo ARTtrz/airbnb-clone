@@ -1,8 +1,11 @@
+'use client'
 import React from 'react';
 import { FC } from 'react';
 interface ContainerProps{
     children: React.ReactNode
-}
+}   
+
+
 
 const Container: FC<ContainerProps> = ({
     children
