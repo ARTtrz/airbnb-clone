@@ -7,7 +7,8 @@ import Heading from '../Heading';
 import { categories } from '../navbar/Categories';
 import CategoryBox from '../inputs/CategoryInput';
 import { FieldValue, FieldValues, useForm } from 'react-hook-form';
-
+import CountrySelect from '../inputs/CountrySelect';
+import Map from '../Map';
 enum STEPS {
     CATEGORY = 0,
     LOCATION = 1,
@@ -20,7 +21,7 @@ enum STEPS {
 
 const RentModal = () => {
     const rentModal = useRentModal()
-    const [step, setStep] = useState(STEPS.CATEGORY)
+    const [step, setStep] = useState(STEPS.LOCATION)
 
     const {register, handleSubmit, setValue, watch, formState:{errors}} = useForm<FieldValues>({
         defaultValues: {
@@ -37,7 +38,7 @@ const RentModal = () => {
     })
 
     const category = watch('category')
-
+    const location = watch('location')
     const setCutomValue = (id: string, value: any) => {
         setValue(id, value, {
             shouldDirty: true,
@@ -68,6 +69,8 @@ const RentModal = () => {
         return 'Back'
     }, [step])
 
+
+
     let bodyContent = (
         <div className="flex flex-col gap-8">
             <Heading title="Which of these best describes your place?" subtitle='Pick a category'/>
@@ -80,6 +83,21 @@ const RentModal = () => {
             </div>
         </div>
     )
+    if (step === STEPS.LOCATION) {
+        bodyContent = (
+          <div className="flex flex-col gap-8">
+            <Heading
+              title="Where is your place located?"
+              subtitle="Help guests find you!"
+            />
+            <CountrySelect 
+              value={location} 
+              onChange={(value) => setCutomValue('location', value)} 
+            />
+            <Map center={location?.latlng} />
+          </div>
+        );
+      }
     return (
         <Modal
             isOpen={rentModal.isOpen}
